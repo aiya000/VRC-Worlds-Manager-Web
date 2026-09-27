@@ -623,6 +623,22 @@ it fail. A test that passes either way proves nothing.
 - Ensure no new TypeScript errors are introduced
 - Verify that static generation completes without errors
 
+## When Something Goes Wrong
+
+Rare troubles, the kind that cost an hour to work out and then nothing for months, each have a file
+of their own under `agents/knowledge/`. This section is only the index: find the symptom here and
+read the file.
+
+- **Many E2E specs fail at once, all of them through `/start` or all of them signing in**, and the
+  change does not explain it -- the dev server Playwright reused is broken, not the code:
+  [e2e-dev-server-stuck.md](./agents/knowledge/e2e-dev-server-stuck.md)
+- **Playwright reports `Executable doesn't exist`**, including in a Claude Code cloud session
+  whose browsers belong to another Playwright version:
+  [playwright-browser-missing.md](./agents/knowledge/playwright-browser-missing.md)
+
+When a new trouble is worked out, add a file there and a line here: the symptom as it is first
+seen, then the link.
+
 ## Language
 
 - All development-facing text must be written in **English**: code comments, commit messages, AGENTS.md, and other internal documentation

@@ -18,6 +18,7 @@ import { GoogleDriveSection } from './components/google-drive-section'
 import { MemoConflictsSection } from './components/memo-conflicts-section'
 import { PushSettingsSection } from './components/push-settings-section'
 import { SignedInAccount } from './components/signed-in-account'
+import { StartupPageSection } from './components/startup-page-section'
 import { DriveSyncOriginNotice } from '@/components/drive-sync-origin-notice'
 import { useDriveSyncUnavailableHostname } from '@/hooks/use-drive-sync-origin'
 import { WorldCardPreview } from '@/components/world-card'
@@ -206,6 +207,13 @@ export default function SettingsPage() {
               }
             />
           </Card>
+
+          <StartupPageSection
+            isDeviceOnly={isDeviceOnly('startupPage')}
+            onDeviceOnlyChange={(deviceOnly) =>
+              handleDeviceOnlyChange('startupPage', deviceOnly)
+            }
+          />
 
           <Card className="flex flex-col items-start justify-between space-y-3 p-4 rounded-lg border">
             <div className="flex flex-row justify-between w-full">

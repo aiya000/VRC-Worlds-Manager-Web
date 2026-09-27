@@ -47,6 +47,7 @@ import {
 } from '@/lib/services/vrchat-api'
 import type { LaunchOutcome } from '@/lib/launch-target'
 import type { SearchablePlatform } from '@/lib/platform-filter'
+import { folderStartupPage, type StartupPage } from '@/lib/startup-page'
 import type {
   Result,
   BackupMetaData,
@@ -279,6 +280,14 @@ export const commands = {
       Effect.gen(function* () {
         const svc = yield* FolderService
         yield* svc.renameFolder(oldName, newName)
+        // The startup page names its folder, so a rename here carries it
+        // along instead of leaving it to fall back to every world.
+        const preferences = yield* PreferencesService
+        if (
+          (yield* preferences.getStartupPage()) === folderStartupPage(oldName)
+        ) {
+          yield* preferences.setStartupPage(folderStartupPage(newName))
+        }
       }),
     )
   },
@@ -636,6 +645,24 @@ export const commands = {
       Effect.gen(function* () {
         const svc = yield* PreferencesService
         yield* svc.setFolderRemovalPreference(dontShowRemoveFromFolder)
+      }),
+    )
+  },
+
+  async getStartupPage(): Promise<Result<StartupPage, string>> {
+    return run(
+      Effect.gen(function* () {
+        const svc = yield* PreferencesService
+        return yield* svc.getStartupPage()
+      }),
+    )
+  },
+
+  async setStartupPage(page: StartupPage): Promise<Result<null, string>> {
+    return runVoid(
+      Effect.gen(function* () {
+        const svc = yield* PreferencesService
+        yield* svc.setStartupPage(page)
       }),
     )
   },
