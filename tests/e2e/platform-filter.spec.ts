@@ -18,7 +18,7 @@ async function openTheFilters(page: Page) {
 }
 
 async function toggle(page: Page, platform: string) {
-  await page.locator(`#advanced-search-platform-${platform}`).click()
+  await page.locator(`#list-platform-${platform}`).click()
 }
 
 async function expectShown(page: Page, names: string[]) {
@@ -65,28 +65,28 @@ test.describe('filtering the list by supported platform', () => {
     await expectShown(page, [PC_WORLD, CROSS_WORLD, UNKNOWN_WORLD])
   })
 
-  test('shows everything while no box is ticked', async ({ page }) => {
-    await openTheFilters(page)
-    await page.keyboard.press('Escape')
+  test('shows the checkboxes on the list itself', async ({ page }) => {
+    await expect(page.getByTestId('list-platform-filter')).toBeVisible()
+    await expect(page.getByTestId('list-platform-filter')).toContainText(
+      jaJP['platform-filter:label'],
+    )
+  })
 
+  test('shows everything while no box is ticked', async ({ page }) => {
     await expectShown(page, [PC_WORLD, CROSS_WORLD, UNKNOWN_WORLD])
   })
 
   test('keeps only the worlds that support the ticked platform', async ({
     page,
   }) => {
-    await openTheFilters(page)
     await toggle(page, 'android')
-    await page.keyboard.press('Escape')
 
     await expectShown(page, [CROSS_WORLD])
   })
 
   test('wants both when both are ticked, not either', async ({ page }) => {
-    await openTheFilters(page)
     await toggle(page, 'android')
     await toggle(page, 'ios')
-    await page.keyboard.press('Escape')
 
     await expectShown(page, [])
   })
@@ -94,9 +94,7 @@ test.describe('filtering the list by supported platform', () => {
   test('finds the world VRChat said nothing about under "unknown"', async ({
     page,
   }) => {
-    await openTheFilters(page)
     await toggle(page, 'unknown')
-    await page.keyboard.press('Escape')
 
     await expectShown(page, [UNKNOWN_WORLD])
   })
@@ -104,24 +102,31 @@ test.describe('filtering the list by supported platform', () => {
   test('brings everything back when the box is unticked again', async ({
     page,
   }) => {
-    await openTheFilters(page)
     await toggle(page, 'android')
-    await page.keyboard.press('Escape')
     await expectShown(page, [CROSS_WORLD])
 
-    await openTheFilters(page)
     await toggle(page, 'android')
-    await page.keyboard.press('Escape')
 
     await expectShown(page, [PC_WORLD, CROSS_WORLD, UNKNOWN_WORLD])
   })
 
   test('brings everything back through "clear all"', async ({ page }) => {
-    await openTheFilters(page)
     await toggle(page, 'android')
+    await expectShown(page, [CROSS_WORLD])
+
+    await openTheFilters(page)
     await page.getByRole('button', { name: jaJP['general:clear-all'] }).click()
     await page.keyboard.press('Escape')
 
     await expectShown(page, [PC_WORLD, CROSS_WORLD, UNKNOWN_WORLD])
+    await expect(page.locator('#list-platform-android')).not.toBeChecked()
+  })
+
+  test('explains the AND behind the "?" beside the label', async ({ page }) => {
+    await page.getByTestId('list-platform-filter-help').click()
+
+    await expect(
+      page.getByTestId('list-platform-filter-explanation'),
+    ).toContainText(jaJP['platform-filter:hint'])
   })
 })

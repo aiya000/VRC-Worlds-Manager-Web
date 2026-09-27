@@ -289,6 +289,8 @@
   "advanced-search:apply-filters": "Apply Filters",
   "platform-filter:label": "Supported platforms",
   "platform-filter:hint": "Shows only worlds that support every checked platform",
+  "platform-filter:help-title": "About \"Supported platforms\"",
+  "platform-filter:help-what-title": "What it does",
   "platform-filter:pc": "PC",
   "platform-filter:android": "Android",
   "platform-filter:ios": "iOS",

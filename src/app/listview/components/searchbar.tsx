@@ -24,6 +24,8 @@ import { SidebarTrigger } from '@/components/ui/sidebar'
 import { FolderType } from '@/types/folders'
 import { cn } from '@/lib/utils'
 import { useWorldFiltersStore } from '../hook/use-filters'
+import { PlatformFilterCheckboxes } from '@/components/platform-filter-checkboxes'
+import { platformFilterOptions } from '@/lib/platform-filter'
 
 type SortField =
   | 'name'
@@ -55,6 +57,8 @@ export function SearchBar({ currentFolder }: SearchBarProps) {
     setFolderFilters,
     memoTextFilter,
     setMemoTextFilter,
+    platformFilters,
+    setPlatformFilters,
     clearFilters,
   } = useWorldFiltersStore()
   const filterRowRef = useRef<HTMLDivElement>(null)
@@ -214,6 +218,18 @@ export function SearchBar({ currentFolder }: SearchBarProps) {
             )}
           </Button>
         </div>
+      </div>
+
+      {/* On the page itself, as on the search page, rather than behind the
+          advanced search dialog. */}
+      <div className="px-4 pb-3">
+        <PlatformFilterCheckboxes
+          options={platformFilterOptions}
+          values={platformFilters}
+          onValuesChange={setPlatformFilters}
+          idPrefix="list"
+          inline
+        />
       </div>
 
       {/* Filter Section */}

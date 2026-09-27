@@ -289,6 +289,8 @@
   "advanced-search:apply-filters": "フィルタを適用",
   "platform-filter:label": "対応プラットフォーム",
   "platform-filter:hint": "チェックした全部に対応しているワールドだけを表示します",
+  "platform-filter:help-title": "「対応プラットフォーム」について",
+  "platform-filter:help-what-title": "何をするか",
   "platform-filter:pc": "PC",
   "platform-filter:android": "Android",
   "platform-filter:ios": "iOS",
