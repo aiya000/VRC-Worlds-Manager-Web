@@ -130,3 +130,61 @@ test.describe('filtering the list by supported platform', () => {
     ).toContainText(jaJP['platform-filter:hint'])
   })
 })
+
+/**
+ * On a phone the row would take two more lines above the grid, so it starts
+ * folded behind a button beside the sort controls.
+ */
+test.describe('the platform row on a phone', () => {
+  test.use({ viewport: { width: 390, height: 844 } })
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto(LIST_VIEW)
+    await page.addStyleTag({
+      content: 'nextjs-portal { display: none !important; }',
+    })
+    await expect(page.getByTestId('platform-filter-toggle')).toBeVisible()
+  })
+
+  test('starts folded', async ({ page }) => {
+    await expect(page.getByTestId('list-platform-filter')).toBeHidden()
+    await expect(page.getByTestId('platform-filter-toggle')).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    )
+  })
+
+  test('unfolds on a press, and folds again on the next', async ({ page }) => {
+    const toggleButton = page.getByTestId('platform-filter-toggle')
+
+    await toggleButton.click()
+    await expect(page.getByTestId('list-platform-filter')).toBeVisible()
+    await expect(toggleButton).toHaveAttribute('aria-expanded', 'true')
+
+    await toggleButton.click()
+    await expect(page.getByTestId('list-platform-filter')).toBeHidden()
+    await expect(toggleButton).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  test('marks the folded button while a box is ticked', async ({ page }) => {
+    const toggleButton = page.getByTestId('platform-filter-toggle')
+    await expect(page.getByTestId('platform-filter-active-dot')).toHaveCount(0)
+
+    await toggleButton.click()
+    await toggle(page, 'android')
+    await toggleButton.click()
+
+    await expect(page.getByTestId('platform-filter-active-dot')).toBeVisible()
+  })
+})
+
+test.describe('the platform row on a VR overlay panel', () => {
+  test.use({ viewport: { width: 720, height: 640 } })
+
+  test('is always open, with nothing to unfold', async ({ page }) => {
+    await page.goto(LIST_VIEW)
+
+    await expect(page.getByTestId('list-platform-filter')).toBeVisible()
+    await expect(page.getByTestId('platform-filter-toggle')).toBeHidden()
+  })
+})

@@ -182,6 +182,8 @@
   "world-card:field-last-updated": "最終更新",
   "world-card:field-favorites": "お気に入り数",
   "world-grid:search-placeholder": "ワールドを検索...",
+  "world-grid:show-platform-filter": "対応プラットフォームの絞り込みを開く",
+  "world-grid:hide-platform-filter": "対応プラットフォームの絞り込みを閉じる",
   "world-grid:clear-search": "検索をクリア",
   "world-grid:sort-placeholder": "並び替え...",
   "world-grid:sort-name": "名前",

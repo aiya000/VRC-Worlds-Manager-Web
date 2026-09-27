@@ -182,6 +182,8 @@
   "world-card:field-last-updated": "Last Updated",
   "world-card:field-favorites": "Favorites",
   "world-grid:search-placeholder": "Search worlds...",
+  "world-grid:show-platform-filter": "Show the platform filter",
+  "world-grid:hide-platform-filter": "Hide the platform filter",
   "world-grid:clear-search": "Clear search",
   "world-grid:sort-placeholder": "Sort by...",
   "world-grid:sort-name": "Name",

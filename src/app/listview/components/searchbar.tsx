@@ -3,6 +3,8 @@ import { Input } from '@/components/ui/input'
 import { useLocalization } from '@/hooks/use-localization'
 import {
   CheckSquare,
+  ChevronDown,
+  ChevronUp,
   SortAsc,
   SortDesc,
   Square,
@@ -17,7 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useSelectedWorldsStore } from '../hook/use-selected-worlds'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { usePopupStore } from '../hook/usePopups/store'
 import { Badge } from '@/components/ui/badge'
 import { SidebarTrigger } from '@/components/ui/sidebar'
@@ -70,6 +72,7 @@ export function SearchBar({ currentFolder }: SearchBarProps) {
   const clearRef = useRef<HTMLButtonElement>(null)
   const wrapFolders = false // behavior retained but state managed internally no-op
   const searchInputRef = useRef<HTMLInputElement>(null)
+  const [isPlatformFilterOpen, setIsPlatformFilterOpen] = useState(false)
 
   const setPopup = usePopupStore((state) => state.setPopup)
 
@@ -217,12 +220,44 @@ export function SearchBar({ currentFolder }: SearchBarProps) {
               <Square className="h-4 w-4" />
             )}
           </Button>
+          {/* Phones only: the platform row costs two lines there, so it
+              waits behind this until asked for. The dot says a box is
+              ticked while the row is out of sight. */}
+          <Button
+            variant="ghost"
+            onClick={() => setIsPlatformFilterOpen(!isPlatformFilterOpen)}
+            className="relative h-10 w-10 shrink-0 sm:hidden"
+            data-testid="platform-filter-toggle"
+            aria-expanded={isPlatformFilterOpen}
+            aria-controls="list-platform-filter-row"
+            aria-label={t(
+              isPlatformFilterOpen
+                ? 'world-grid:hide-platform-filter'
+                : 'world-grid:show-platform-filter',
+            )}
+          >
+            {isPlatformFilterOpen ? (
+              <ChevronUp className="h-4 w-4" />
+            ) : (
+              <ChevronDown className="h-4 w-4" />
+            )}
+            {!isPlatformFilterOpen && platformFilters.length > 0 && (
+              <span
+                aria-hidden
+                data-testid="platform-filter-active-dot"
+                className="absolute right-1 top-1 h-2 w-2 rounded-full bg-primary"
+              />
+            )}
+          </Button>
         </div>
       </div>
 
       {/* On the page itself, as on the search page, rather than behind the
           advanced search dialog. */}
-      <div className="px-4 pb-3">
+      <div
+        id="list-platform-filter-row"
+        className={cn('px-4 pb-3', !isPlatformFilterOpen && 'hidden sm:block')}
+      >
         <PlatformFilterCheckboxes
           options={platformFilterOptions}
           values={platformFilters}
