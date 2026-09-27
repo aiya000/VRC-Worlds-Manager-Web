@@ -12,7 +12,8 @@ const FOLDER_MIME_TYPE = 'application/vnd.google-apps.folder'
 
 /** The preferences tab's dropdowns, in the order they appear. */
 const LANGUAGE = 1
-const CARD_SIZE = 2
+// 2 is the start screen.
+const CARD_SIZE = 3
 
 /**
  * A snapshot from a device that is not this one, holding a language this one

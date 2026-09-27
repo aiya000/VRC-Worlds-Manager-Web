@@ -24,6 +24,7 @@ export const DEFAULT_SETTING_SYNC_CLASSES = {
   instanceType: 'synced',
   sortPreferences: 'synced',
   folderRemovalPreference: 'synced',
+  startupPage: 'synced',
   skipSelfInviteOnCreate: 'synced',
   showWorldsKeptForInstance: 'synced',
   markWorldsKeptForInstanceOnFind: 'synced',

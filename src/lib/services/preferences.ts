@@ -14,6 +14,11 @@ import type {
   WorldDetailFieldVisibility,
 } from '@/lib/types'
 import type { InstanceType } from '@/types/instances'
+import {
+  DEFAULT_STARTUP_PAGE,
+  normalizeStartupPage,
+  type StartupPage,
+} from '@/lib/startup-page'
 
 const defaultWorldCardFieldVisibility: WorldCardFieldVisibility = {
   name: true,
@@ -85,6 +90,8 @@ export class PreferencesService extends Context.Tag('PreferencesService')<
     readonly setFolderRemovalPreference: (
       pref: FolderRemovalPreference,
     ) => Effect.Effect<void>
+    readonly getStartupPage: () => Effect.Effect<StartupPage>
+    readonly setStartupPage: (page: StartupPage) => Effect.Effect<void>
     readonly getSortPreferences: () => Effect.Effect<[string, string]>
     readonly setSortPreferences: (
       sortField: string,
@@ -189,6 +196,13 @@ export const PreferencesServiceLive = Layer.succeed(PreferencesService, {
     ),
   setFolderRemovalPreference: (pref) =>
     Effect.sync(() => setItem('folderRemovalPreference', pref)),
+  getStartupPage: () =>
+    Effect.succeed(
+      normalizeStartupPage(
+        getItem<unknown>('startupPage', DEFAULT_STARTUP_PAGE),
+      ),
+    ),
+  setStartupPage: (page) => Effect.sync(() => setItem('startupPage', page)),
   getSortPreferences: () =>
     Effect.succeed(
       getItem<[string, string]>('sortPreferences', ['dateAdded', 'desc']),

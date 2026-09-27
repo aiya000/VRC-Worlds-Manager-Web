@@ -11,7 +11,8 @@ const SETTINGS = '/listview/settings'
  */
 const THEME = 0
 const LANGUAGE = 1
-const CARD_SIZE = 2
+// 2 is the start screen.
+const CARD_SIZE = 3
 
 async function openPreferences(page: Page) {
   await page.goto(SETTINGS)

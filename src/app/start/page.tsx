@@ -6,6 +6,30 @@ import Image from 'next/image'
 import { Loader2 } from 'lucide-react'
 import { commands } from '@/lib/commands'
 import { useLocalization } from '@/hooks/use-localization'
+import {
+  DEFAULT_STARTUP_PAGE,
+  startupFolderName,
+  startupPagePath,
+} from '@/lib/startup-page'
+
+/**
+ * The screen chosen in the settings. A failure to read either the choice or
+ * the folders is no reason to hold the launch up, so it lands on every world.
+ */
+async function chosenStartupPath(): Promise<string> {
+  const pageResult = await commands.getStartupPage()
+  const page =
+    pageResult.status === 'ok' ? pageResult.data : DEFAULT_STARTUP_PAGE
+  if (startupFolderName(page) === null) {
+    return startupPagePath(page, [])
+  }
+  const foldersResult = await commands.getFolders()
+  const folderNames =
+    foldersResult.status === 'ok'
+      ? foldersResult.data.map((folder) => folder.name)
+      : []
+  return startupPagePath(page, folderNames)
+}
 
 /**
  * Where the app starts. `/` cannot be: Google's brand verification requires
@@ -63,7 +87,7 @@ export default function Start() {
 
           if (authResult.status === 'ok') {
             console.info('User is authenticated')
-            goTo('/listview/folders/special/all')
+            goTo(await chosenStartupPath())
           } else {
             goTo('/login')
           }
